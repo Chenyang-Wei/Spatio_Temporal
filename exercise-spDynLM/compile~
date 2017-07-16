@@ -1,0 +1,1 @@
+R CMD Sweave initial-exploration-spDynLM.Rnw && R CMD pdflatex initial-exploration-spDynLM.tex && acroread initial-exploration-spDynLM.pdf && R CMD Stangle initial-exploration-spDynLM.Rnw

@@ -19,11 +19,10 @@ data("NETemp.dat")
 ne.temp <- NETemp.dat
 
 ##take a chunk of New England
-ne.temp <- ne.temp[ne.temp[, "UTMX"] > 5500000 
-                   & ne.temp[, "UTMY"] > 3000000,]
+ne.temp <- ne.temp[ne.temp[,"UTMX"] > 5500000 & ne.temp[,"UTMY"] > 3000000,]
 
 ##subset first 2 years (Jan 2000 - Dec. 2002)
-y.t <- ne.temp[, 4:27]
+y.t <- ne.temp[,4:27]
 N.t <- ncol(y.t) ##number of months
 n <- nrow(y.t) ##number of observation per months
 
@@ -31,23 +30,23 @@ n <- nrow(y.t) ##number of observation per months
 ###################################################
 ### code chunk number 3: data
 ###################################################
-## add some missing observations to illustrate prediction
+##add some missing observations to illustrate prediction
 miss <- sample(1:N.t, 10)
 holdout.station.id <- 5
 y.t.holdout <- y.t[holdout.station.id, miss]
 y.t[holdout.station.id, miss] <- NA
 
-## scale to km
-coords <- as.matrix(ne.temp[, c("UTMX", "UTMY")] / 1000)
+##scale to km
+coords <- as.matrix(ne.temp[,c("UTMX", "UTMY")]/1000)
 max.d <- max(iDist(coords))
-plot(coords, xlab="Easting (km)", ylab="Northing (km)")
+plot(coords, xlab="Easting (km)", ylab="Northin (km)")
 
 
 ###################################################
 ### code chunk number 4: priors
 ###################################################
-## set starting and priors
-p <- 2 # number of regression parameters in each month
+##set starting and priors
+p <- 2 #number of regression parameters in each month
 
 starting <- list("beta"=rep(0,N.t*p), "phi"=rep(3/(0.5*max.d), N.t),
                  "sigma.sq"=rep(2,N.t), "tau.sq"=rep(1, N.t),
@@ -65,7 +64,7 @@ priors <- list("beta.0.Norm"=list(rep(0,p), diag(1000,p)),
 ###################################################
 ### code chunk number 5: spDynLM
 ###################################################
-## make symbolic model formula statement for each month
+##make symbolic model formula statement for each month
 mods <- lapply(paste(colnames(y.t),'elev',sep='~'), as.formula)
 n.samples <- 4000
 
@@ -141,8 +140,9 @@ arrows(y.obs, y.obs.hat.med, y.obs, y.obs.hat.up, length=0.02, angle=90)
 arrows(y.obs, y.obs.hat.med, y.obs, y.obs.hat.low, length=0.02, angle=90)
 lines(-50:50, -50:50, col="blue")
 
-plot(y.ho, y.ho.hat.med, pch=19, cex=0.5, xlab="observed", ylab="predicted", main="Observed vs. predicted")
+plot(y.ho, y.ho.hat.med, pch=19, cex=0.5, xlab="observed", ylab="predicted", , main="Observed vs. predicted")
 arrows(y.ho, y.ho.hat.med, y.ho, y.ho.hat.up, length=0.02, angle=90)
 arrows(y.ho, y.ho.hat.med, y.ho, y.ho.hat.low, length=0.02, angle=90)
 lines(-50:50, -50:50, col="blue")
+
 
